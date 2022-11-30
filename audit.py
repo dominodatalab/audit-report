@@ -11,6 +11,7 @@ from functions import *
 ### Vars and log settings
 # I'd like to move more of these values into the report_config.ini file. 
 config = configparser.ConfigParser()
+config.optionxform=str
 config.read('report_config.ini')
 
 project_name = os.getenv('DOMINO_PROJECT_NAME')
@@ -20,7 +21,11 @@ api_key = os.getenv('DOMINO_USER_API_KEY')
 
 columns_to_expand = ['stageTime', 'startedBy', 'commitDetails', 'statuses', 'environment', 'startState', 'endState']
 columns_to_datetime = ['stageTime-submissionTime', 'stageTime-runStartTime', 'stageTime-completedTime']
-column_order = config['column_order']
+if config.has_section('column_order'):
+    column_order = config['column_order']
+else:
+    column_order = column_order = ['projectName', 'number', 'title', 'startedBy-username', 'jobRunCommand', 'statuses-executionStatus', 'stageTime-submissionTime', 'stageTime-runStartTime', 'stageTime-completedTime', 'hardwareTier', 'environment-environmentName', 'environment-revisionNumber', 'changes', 'tags', 'commitDetails-inputCommitId', 'commitDetails-outputCommitId', 'statuses-isCompleted', 'statuses-isArchived', 'statuses-isScheduled', 'goals', 'comments', 'dominoStats', 'mainRepoGitRef', 'dependentRepositories', 'dependentDatasetMounts', 'dependentProjects', 'dependentExternalVolumeMounts', 'startState-importedProjectArtifacts', 'environment-environmentRevisionId', 'endState-commitId', 'startedBy-id', 'hardwareTierId', 'id']
+
 
 output_location = '/mnt/artifacts'
 
